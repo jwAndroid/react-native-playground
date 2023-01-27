@@ -1,120 +1,70 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
  * @format
  */
 
-import React, {type PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import React, {useState} from 'react';
+import {SafeAreaView, Image, Text} from 'react-native';
+import ImageResizer from '@bam.tech/react-native-image-resizer';
+import {launchImageLibrary} from 'react-native-image-picker';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const Section: React.FC<
-  PropsWithChildren<{
-    title: string;
-  }>
-> = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+// https 의 uri 가 아닌, 로컬기기에서 나오는 file or ph// 의 파일로 리사이징 해야 동작한다.
+// 위 문제가 안드로이드에서는 상관없지만, ios 에서는 해당사항이 적용된다.
+// 그래서 서버로 업로드 하기전에 사진을 뽑고나서 리사이징 후 업로드를 해야한다.
 
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+  const [pickUri, setPickUri] = useState('');
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const pickImage = async () => {
+    const picked = await launchImageLibrary({mediaType: 'photo'});
+
+    if (picked.assets && picked.assets[0].uri !== undefined) {
+      setPickUri(picked.assets[0].uri);
+    }
+
+    console.log(JSON.stringify(picked, null, 5));
+  };
+
+  const getImageSize = () => {
+    Image.getSize(
+      pickUri,
+      (width, height) => {
+        console.log('width:', width);
+        console.log('height:', height);
+      },
+      errorMsg => {
+        console.log(errorMsg);
+      },
+    );
+  };
+
+  const resize = async () => {
+    const response = await ImageResizer.createResizedImage(
+      pickUri,
+      600,
+      300,
+      'JPEG',
+      100,
+    );
+
+    console.log(JSON.stringify(response, null, 5));
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+    <SafeAreaView
+      style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Text style={{fontSize: 30, marginTop: 20}} onPress={pickImage}>
+        pickImage
+      </Text>
+
+      <Text style={{fontSize: 30}} onPress={getImageSize}>
+        getSize
+      </Text>
+
+      <Text style={{fontSize: 30, marginTop: 20}} onPress={resize}>
+        resize
+      </Text>
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;
