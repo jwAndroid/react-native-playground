@@ -2,7 +2,7 @@
  * @format
  */
 
-import React, {memo, useCallback, useState} from 'react';
+import React, {memo, useCallback} from 'react';
 import {FlatList, ListRenderItem, SafeAreaView} from 'react-native';
 
 import {images} from './source';
