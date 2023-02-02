@@ -35,7 +35,7 @@ const App = () => {
 
   const resize = async () => {
     const response = await ImageResizer.createResizedImage(
-      pickUri,
+      'ph://F619A76F-EE29-427E-A064-29BFBF2891EF/L0/001',
       1280,
       1280,
       'JPEG',
@@ -64,6 +64,11 @@ const App = () => {
       <Text style={{fontSize: 30, marginTop: 20}} onPress={resize}>
         resize
       </Text>
+
+      <Image
+        style={{width: 200, height: 200}}
+        source={{uri: 'ph://F619A76F-EE29-427E-A064-29BFBF2891EF/L0/001'}}
+      />
     </SafeAreaView>
   );
 };
