@@ -39,9 +39,9 @@ const App = () => {
 
   const resize = async () => {
     const response = await ImageResizer.createResizedImage(
-      pickUri,
-      600,
-      300,
+      'file:///private/var/mobile/Containers/Data/Application/026DE1D3-B6C2-4518-A83F-3B5C729E09F2/tmp/1p7s8s.jpg',
+      1280,
+      1280,
       'JPEG',
       100,
     );
@@ -51,7 +51,12 @@ const App = () => {
 
   return (
     <SafeAreaView
-      style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
+      }}>
       <Text style={{fontSize: 30, marginTop: 20}} onPress={pickImage}>
         pickImage
       </Text>
