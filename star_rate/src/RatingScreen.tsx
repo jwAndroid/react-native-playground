@@ -15,17 +15,19 @@ const RatingScreen = () => {
     <SafeAreaView>
       <AirbnbRating
         count={5}
-        reviews={['Terrible', 'Bad', 'Meh', 'OK', 'Good']}
         defaultRating={5}
+        showRating={false}
+        isDisabled
         size={20}
         onFinishRating={onFinishRating}
       />
 
       <Rating
-        showRating
+        readonly
+        showRating={false}
         onFinishRating={onFinishRating2}
-        fractions={1.5}
-        style={{paddingVertical: 10}}
+        ratingCount={5}
+        startingValue={4}
       />
 
       <Rating
