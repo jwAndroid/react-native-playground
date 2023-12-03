@@ -6,18 +6,19 @@ import DraggableFlatList, {
 } from 'react-native-draggable-flatlist';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
-const NUM_ITEMS = 200;
+const NUM_ITEMS = 20;
 
-export function getColor(i: number, numItems: number) {
+function getColor(i: number, numItems: number) {
   const multiplier = 255 / (numItems - 1);
+
   const colorVal = i * multiplier;
+
   return `rgb(${colorVal}, ${Math.abs(128 - colorVal)}, ${255 - colorVal})`;
 }
 
-export const getRandColorVal = () => Math.floor(Math.random() * 255);
-
-export const mapIndexToData = (d: any, index: number, arr: any[]) => {
+const mapIndexToData = (d: any, index: number, arr: any[]) => {
   const backgroundColor = getColor(index, arr.length);
+
   return {
     text: `${index}`,
     key: `key-${backgroundColor}`,
@@ -25,7 +26,7 @@ export const mapIndexToData = (d: any, index: number, arr: any[]) => {
   };
 };
 
-export type Item = ReturnType<typeof mapIndexToData>;
+type Item = ReturnType<typeof mapIndexToData>;
 
 const initialData: Item[] = [...Array(NUM_ITEMS)].map(mapIndexToData);
 
